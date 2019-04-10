@@ -4,56 +4,63 @@ import os
 csv_filepath = os.path.join(os.path.dirname(__file__), "..", "data", "products.csv")
 csv_headers = ["id", "name", "aisle", "department", "price"]
 
-#
-# READ
-#
 
-products = []
+def read_from_csv(my_csv_filepath):
+    with open(my_csv_filepath, "r") as csv_file:
+          reader = csv.DictReader(csv_file)
+          my_products = []
+          for ordered_dict in reader:
+               my_products.append(dict(ordered_dict))
+    return my_products
 
-with open(csv_filepath, "r") as csv_file:
-    reader = csv.DictReader(csv_file)
-    for ordered_dict in reader:
-        products.append(dict(ordered_dict))
+if __name__ == "__main__":
+     #
+     # READ
+     #
 
-#
-# LIST
-#
+     products = []
 
-print("---------------------")
-print("LISTING PRODUCTS:")
+     products = read_from_csv(csv_filepath)
 
-for product in products:
-    print(f"  {product['id']}) {product['name']} ")
+     #
+     # LIST
+     #
 
-#
-# CREATE
-#
+     print("---------------------")
+     print("LISTING PRODUCTS:")
 
-print("---------------------")
-print("CREATING A NEW PRODUCT:")
+     for product in products:
+         print(f"  {product['id']}) {product['name']} ")
 
-new_product = {
-    "name": "My New Product",
-    "aisle": "Some Aisle",
-    "department": "Some Department",
-    "price": 99.99
-} # further exploration / todo: ask for user to input
+     #
+     # CREATE
+     #
 
-next_id = len(products) + 1
+     print("---------------------")
+     print("CREATING A NEW PRODUCT:")
 
-new_product["id"] = next_id
+     new_product = {
+         "name": "My New Product",
+         "aisle": "Some Aisle",
+         "department": "Some Department",
+         "price": 99.99
+     } # further exploration / todo: ask for user to input
 
-print(new_product)
+     next_id = len(products) + 1
 
-products.append(new_product)
+     new_product["id"] = next_id
 
-#
-# WRITE
-#
+     print(new_product)
 
-with open(csv_filepath, "w") as csv_file:
-    writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
-    writer.writeheader()
+     products.append(new_product)
 
-    for product in products:
-        writer.writerow(product)
+     #
+     # WRITE
+     #
+
+     with open(csv_filepath, "w") as csv_file:
+         writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
+         writer.writeheader()
+
+         for product in products:
+             writer.writerow(product)
